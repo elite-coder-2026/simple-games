@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Pac-Man</title>
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<div id="wrap">
+  <div id="hud">
+    <span id="score">SCORE: 0</span>
+    <span id="lives">LIVES: 3</span>
+    <span id="level">LEVEL 1</span>
+  </div>
+  <canvas id="game" width="560" height="620"></canvas>
+  <div id="controls">
+    <button id="startBtn">START</button>
+    <button id="pauseBtn">PAUSE</button>
+  </div>
+  <div id="msg">Arrow keys to move. Eat all the dots, grab a power pellet to chase the ghosts. ENTER starts / restarts, P pauses.</div>
+</div>
+
+<script src="game.js"></script>
+</body>
+</html>
