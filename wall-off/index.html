@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Wall Off</title>
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<div id="wrap">
+  <div id="hud">
+    <span id="level">LEVEL 1</span>
+    <span id="balls">BALLS: 2</span>
+    <span id="cleared">CLEARED: 0%</span>
+    <button id="orientation">WALL: VERTICAL</button>
+  </div>
+  <canvas id="game" width="640" height="416"></canvas>
+  <div id="msg">Click the board to grow a wall in the direction shown by the button (click the button to switch). If a ball touches the wall before it fully connects, it's destroyed. Seal off 75% of the board to level up (+1 ball).</div>
+</div>
+<div id="banner"></div>
+
+<script src="game.js"></script>
+</body>
+</html>
