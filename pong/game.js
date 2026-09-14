@@ -16,8 +16,8 @@ const win_score = 7
 let left_score = right_score = 0
 let keys = {}
 
-document.addEventListener("keydown", e => keys[e.key] = true)
-document.addEventListener("keyup", e => keys[e.key] = false)
+document.addEventListener("keydown", e => keys[e.code] = true)
+document.addEventListener("keyup", e => keys[e.code] = false)
 
 const left = { x: 20, y: h / 2 - paddle_h / 2 }
 const right = { x: w - 20 - paddle_w, y: h / 2 - paddle_h / 2 }
@@ -43,7 +43,7 @@ const resetMatch = () => {
 document.getElementById("reset").addEventListener("click", resetMatch)
 
 const updateScore = _ => {
-    document.getElementById('score').textContent = `${left_score} - ${right_score}`)
+    document.getElementById('score').textContent = `${left_score} - ${right_score}`
 }
 
 const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v))
@@ -58,6 +58,8 @@ const update = _ => {
     }
 
     right.y = clamp(right.y, 0, h - paddle_h)
+
+    const target_y = ball.y - paddle_h / 2
 
     if (Math.abs(target_y - left.y) > 4) {
         left.y += clamp(target_y - left.y, -cpu_speed, cpu_speed)
@@ -78,13 +80,28 @@ const update = _ => {
         ball.vy *= -1
     }
 
-    if (ball.vx < 0 && ball.x - ball_radius < left.x + paddle_w && ball.y > left.y && ball.y < left.y + paddle_h) {
+    if (ball.vx < 0 && ball.x - ball_radius < left.x + paddle_w && ball.x - ball_radius > left.x &&
+        ball.y > left.y && ball.y < left.y + paddle_h) {
         ball.x = left.x + paddle_w + ball_radius
 
         const rel = (ball.y - (left.y + paddle_h / 2)) / (paddle_h / 2)
         const speed = Math.min(9, Math.hypot(ball.vx, ball.vy) * 1.06)
 
-        ball.vx = Math.cos(rel * 0.6) * speed
+        ball.vx = Math.abs(Math.cos(rel * 0.6) * speed)
+        ball.vy = Math.sin(rel * 0.6) * speed + rel * 1.5
+
+        if (ball.vx < 2)
+            ball.vx = 2
+    }
+
+    if (ball.vx > 0 && ball.x + ball_radius > right.x && ball.x + ball_radius < right.x + paddle_w &&
+        ball.y > right.y && ball.y < right.y + paddle_h) {
+        ball.x = right.x - ball_radius
+
+        const rel = (ball.y - (right.y + paddle_h / 2)) / (paddle_h / 2)
+        const speed = Math.min(9, Math.hypot(ball.vx, ball.vy) * 1.06)
+
+        ball.vx = -Math.abs(Math.cos(rel * 0.6) * speed)
         ball.vy = Math.sin(rel * 0.6) * speed + rel * 1.5
 
         if (ball.vx > -2)
@@ -114,8 +131,8 @@ const update = _ => {
     }
 }
 
-const showBanner = (text) => {
-    document.getElementById('msg').textContent = ' - press reset or keep playing to start a new match'
+function showBanner(text) {
+    document.getElementById('msg').textContent = text + ' - press reset or keep playing to start a new match'
 
     setTimeout(_ => {
         document.getElementById('msg').textContent = 'Up/Down or W/S to move paddle, first to 7 points wins'
